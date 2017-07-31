@@ -11,34 +11,34 @@ projects: [spring-security]
 :icons: font
 :source-highlighter: prettify
 :project_id: gs-securing-web
-This guide walks you through the process of creating a simple web application with resources that are protected by Spring Security.
+本指南将向您介绍创建由Spring Security保护的资源的简单Web应用程序的过程。
 
-== What you'll build
+== 你将做出什么
 
-You'll build a Spring MVC application that secures the page with a login form backed by a fixed list of users.
+您将构建一个Spring MVC应用程序，它用一个固定用户列表支持的登录表单来保证页面的安全性。
 
-== What you'll need
+== 你需要什么
 
 :java_version: 1.8
-include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/master/prereq_editor_jdk_buildtools.adoc[]
+include::https://raw.githubusercontent.com/webGoBetter/getting-started-macros/master/prereq_editor_jdk_buildtools.adoc[]
 
 
-include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/master/how_to_complete_this_guide.adoc[]
+include::https://raw.githubusercontent.com/webGoBetter/getting-started-macros/master/how_to_complete_this_guide.adoc[]
 
 
-include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/master/hide-show-gradle.adoc[]
+include::https://raw.githubusercontent.com/webGoBetter/getting-started-macros/master/hide-show-gradle.adoc[]
 
-include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/master/hide-show-maven.adoc[]
+include::https://raw.githubusercontent.com/webGoBetter/getting-started-macros/master/hide-show-maven.adoc[]
 
-include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/master/hide-show-sts.adoc[]
+include::https://raw.githubusercontent.com/webGoBetter/getting-started-macros/master/hide-show-sts.adoc[]
 
 
 
-== Create an unsecured web application
+== 创建一个不安全的Web应用
 
-Before you can apply security to a web application, you need a web application to secure. The steps in this section walk you through creating a very simple web application. Then you secure it with Spring Security in the next section.
+在你可以尝试将安全性应用于Web应用之前，你需要一个用于保护的Web应用程序。本节中的步骤指导您完成创建一个非常简单的Web应用程序。然后你将在下一节使用Spring Security将其保护起来。
 
-The web application includes two simple views: a home page and a "Hello World" page. The home page is defined in the following Thymeleaf template:
+这个web应用程序包括两个简单的视图，一个是主页，一个是 "Hello World" 页。主页的视图由下面这个Thymeleaf模板来定义：
 
 `src/main/resources/templates/home.html`
 [source,html]
@@ -46,7 +46,7 @@ The web application includes two simple views: a home page and a "Hello World" p
 include::initial/src/main/resources/templates/home.html[]
 ----
 
-As you can see, this simple view includes a link to the page "/hello". That is defined in the following Thymeleaf template:
+如你所见，这个简单的视图包括一个指向 "/hello" 页面的链接，它由下面这个 Thymeleaf 模板来定义：
 
 `src/main/resources/templates/hello.html`
 [source,html]
@@ -54,7 +54,7 @@ As you can see, this simple view includes a link to the page "/hello". That is d
 include::initial/src/main/resources/templates/hello.html[]
 ----
 
-The web application is based on Spring MVC. Thus you need to configure Spring MVC and set up view controllers to expose these templates. Here's a configuration class for configuring Spring MVC in the application.
+Web应用程序基于Spring MVC。因此，您需要配置Spring MVC并设置视图控制器来公开这些模板。这里有一个配置类，用于在应用程序中配置Spring MVC。
 
 `src/main/java/hello/MvcConfig.java`
 [source,java]
@@ -62,21 +62,21 @@ The web application is based on Spring MVC. Thus you need to configure Spring MV
 include::initial/src/main/java/hello/MvcConfig.java[]
 ----
 
-The `addViewControllers()` method (overriding the method of the same name in `WebMvcConfigurerAdapter`) adds four view controllers. Two of the view controllers reference the view whose name is "home" (defined in `home.html`), and another references the view named "hello" (defined in `hello.html`). The fourth view controller references another view named "login". You'll create that view in the next section.
+`addViewControllers()` 方法（覆盖了 `WebMvcConfigurerAdapter` 的同名方法）添加了四个视图控制器。其中两个视图控制器指向了 "home" 视图（在 `home.html` 中定义），另一个指向了 "hello" 视图（在 `hello.html` 中定义）。第四个视图控制器指向另一个视图 "login" ，你将会在下个章节创建这个视图。
 
-At this point, you could jump ahead to _<<run_the_app>>_ and run the application without having to login to anything.
+此刻，你可以直接跳到 _<<run_the_app>>_  的部分，在不需要任何登陆工作的情况下运行Web应用。
 
-With the base simple web application created, you can add security to it.
+一旦最基本的Web应用创建好了，你可以给他加上安全防护。
 
 
 [[initial]]
-== Set up Spring Security
+== 建立Spring Security
 
-Suppose that you want to prevent unauthorized users from viewing the greeting page at "/hello". As it is now, if users click the link on the home page, they see the greeting with no barriers to stop them. You need to add a barrier that forces the user to sign in before seeing that page.
+假设您希望防止未经授权的用户在 "/hello" 上查看问候页。现在，如果用户点击主页上的链接，他们会看到没有任何阻挡的问候语。您需要添加一个屏障，强制用户在看到该页之前登录。
 
-You do that by configuring Spring Security in the application. If Spring Security is on the classpath, then Spring Boot {SpringBootSecurity}[automatically secures all HTTP endpoints] with "basic" authentication. But you can further customize the security settings. The first thing you need to do is add Spring Security to the classpath.
+你可以通过配置Spring Security来完成上面所说的事。如果Spring Security在classpath中，SpringBoot {SpringBootSecurity}[自动保护所有HTTP端点] 启动 "basic" 认证，你也可以进一步的定制安全设置。首先要做的事情就是把Spring Security加入到classpath中。
 
-With Gradle this would be one line in the `dependencies` closure:
+如果使用Gradle，它将会是dependencies部分中的一行：
 
 `build.gradle`
 [source,java]
@@ -88,7 +88,7 @@ include::complete/build.gradle[tag=security]
 }
 ----
 
-With Maven this would be an extra entry added to `<dependencies>`:
+如果使用Maven，那这将是一个额外的条目添加到 `<dependencies>`:
 
 `pom.xml`
 [source,zml]
@@ -100,7 +100,7 @@ include::complete/pom.xml[tag=security]
 </dependencies>
 ----
 
-Here's a security configuration that ensures that only authenticated users can see the secret greeting:
+这里有一个安全配置，确保只有经过身份验证的用户才能看到秘密问候：
 
 `src/main/java/hello/WebSecurityConfig.java`
 [source,java]
@@ -108,15 +108,15 @@ Here's a security configuration that ensures that only authenticated users can s
 include::complete/src/main/java/hello/WebSecurityConfig.java[]
 ----
 
-The `WebSecurityConfig` class is annotated with `@EnableWebSecurity` to enable Spring Security's web security support and provide the Spring MVC integration. It also extends `WebSecurityConfigurerAdapter` and overrides a couple of its methods to set some specifics of the web security configuration.
+这个WebSecurityConfig类被 `@EnableWebSecurity` 标注，来启用Spring Security的web安全支持、以及提供与Spring MVC的融合。这个类还继承了`WebSecurityConfigurerAdapter` 并重写了一些方法来指定一些特定的Web安全设置。
 
-The `configure(HttpSecurity)` method defines which URL paths should be secured and which should not. Specifically, the "/" and "/home" paths are configured to not require any authentication. All other paths must be authenticated.
+`configure(HttpSecurity)` 方法规定了哪个URL应该被保护，哪个不应该。具体而言， "/" 和 "/home" 的路径被配置为不需要任何认证。所有其他URL必须进行身份验证。
 
-When a user successfully logs in, they will be redirected to the previously requested page that required authentication. There is a custom "/login" page specified by `loginPage()`, and everyone is allowed to view it.
+当用户成功登录后，他们将被重定向到先前请求的需要身份验证的页面。还有一个自定义（由 `loginPage()` 指定）的 "/login" 页面，每个用户都可以查看。When a user successfully logs in, they will be redirected to the previously requested page that required authentication. There is a custom "/login" page specified by `loginPage()`, and everyone is allowed to view it.
 
-As for the `configureGlobal(AuthenticationManagerBuilder)` method, it sets up an in-memory user store with a single user. That user is given a username of "user", a password of "password", and a role of "USER".
+至于` configureglobal（AuthenticationManagerBuilder）`方法，建立了一个内存用户存储与单个用户。该用户被赋予用户名 "user" 、密码 "password" 和角色 "USER" 。
 
-Now we need to create the login page. There's already a view controller for the "login" view, so you only need to create the login view itself:
+现在，我们需要创建登录页面。目前已经为 "login" 视图赋予了视图控制器，所以你只需要创建login视图本身：
 
 `src/main/resources/templates/login.html`
 [source,html]
@@ -124,9 +124,9 @@ Now we need to create the login page. There's already a view controller for the 
 include::complete/src/main/resources/templates/login.html[]
 ----
 
-As you can see, this Thymeleaf template simply presents a form that captures a username and password and posts them to "/login". As configured, Spring Security provides a filter that intercepts that request and authenticates the user. If the user fails to authenticate, the page is redirected to "/login?error" and our page displays the appropriate error message. Upon successfully signing out, our application is sent to "/login?logout" and our page displays the appropriate success message.
+正如你所看到的，这个Thymeleaf模板只是给出了一个采集用户名和密码，并将它们作为请求post到 "/login" 的表单。正如刚刚配置的，Spring Security提供一个过滤器，截取该请求，并验证用户身份。如果用户身份验证失败，页面被重定向到 "/login?error" ，我们的页面将显示相应的错误信息。一旦成功登出了，我们的应用程序重定向到到 "/login?logout" 并显示相应的登陆成功的消息。
 
-Last we need to provide the user a way to display the current username and Sign Out. Update the `hello.html` to say hello to the current user and contain a "Sign Out" form as shown below
+最后，我们需要给用户提供一种方式来显示当前用户名和Sign Out按钮。更新 `hello.html` 来问候当前用户，并包含一个 "Sign Out" 的按钮，如下所示：
 
 `src/main/resources/templates/hello.html`
 [source,html]
@@ -134,12 +134,12 @@ Last we need to provide the user a way to display the current username and Sign 
 include::complete/src/main/resources/templates/hello.html[]
 ----
 
-We display the username by using Spring Security's integration with `HttpServletRequest#getRemoteUser()`. The "Sign Out" form submits a POST to "/logout". Upon successfully logging out it will redirect the user to "/login?logout".
+我们通过使用Spring Security所集成的 `HttpServletRequest#getRemoteUser()` 来显示用户名。该 "Sign Out" 按钮提交一个POST请求给 "/logout" 。一旦成功退出，将用户重定向到 "/login?logout" 
 
 [[run_the_app]]
-== Make the application executable
+== 让Web应用可执行
 
-Although it is possible to package this service as a traditional _web application archive_ or link:/understanding/WAR[WAR] file for deployment to an external application server, the simpler approach demonstrated below creates a _standalone application_. You package everything in a single, executable JAR file, driven by a good old Java `main()` method. And along the way, you use Spring's support for embedding the link:/understanding/Tomcat[Tomcat] servlet container as the HTTP runtime, instead of deploying to an external instance.
+虽然可以将此服务打包为一个传统的 link:/understanding/WAR[WAR] 文件用于部署到外部应用服务器，更为简单的方法是创建了一个独立的应用程序。通过一个 good old Java `main()`方法，你能将一切打包成为一个单一的克执行 JAR 文件。在这一过程中，您使用Spring的提供的 link:/understanding/Tomcat[Tomcat]  servlet容器作为HTTP运行时，而不是将它部署的到一个外部实例在中。
 
 
 `src/main/java/hello/Application.java`
@@ -148,10 +148,10 @@ Although it is possible to package this service as a traditional _web applicatio
 include::complete/src/main/java/hello/Application.java[]
 ----
 
-include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/master/spring-boot-application.adoc[]
+include::https://raw.githubusercontent.com/webGoBetter/getting-started-macros/master/spring-boot-application.adoc[]
 
-include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/master/build_an_executable_jar_subhead.adoc[]
-include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/master/build_an_executable_jar_with_both.adoc[]
+include::https://raw.githubusercontent.com/webGoBettergetting-started-macros/master/build_an_executable_jar_subhead.adoc[]
+include::https://raw.githubusercontent.com/webGoBetter/getting-started-macros/master/build_an_executable_jar_with_both.adoc[]
 
 
 [[run]]
@@ -160,27 +160,27 @@ include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/
 ... app starts up ...
 ....
 
-Once the application starts up, point your browser to http://localhost:8080. You should see the home page:
+一旦应用程序启动，用浏览器访问 http://localhost:8080 。你应该看到主页：
 
 image::images/home.png[The application's home page]
 
-When you click on the link, it attempts to take you to the greeting page at `/hello`. But because that page is secured and you have not yet logged in, it takes you to the login page:
+当你点击这个链接，它会尝试把你带到 `/hello` 所指向的欢迎页，但因为这个页面是受保护的，而且目前为止你没有登录，它会带你到登陆页：
 
 image::images/login.png[The login page]
 
-NOTE: If you jumped down here with the unsecured version, then you won't see this login page. Feel free to back up and write the rest of the security-based code.
+NOTE: 如果你跳到这里的不安全的版本，那么你就看不到这个登录页面请随意备份并编写其余的基于安全性的代码。
 
-At the login page, sign in as the test user by entering "user" and "password" for the username and password fields, respectively. Once you submit the login form, you are authenticated and then taken to the greeting page:
+在登录页面上，分别输入用户名和密码字段的 "user" 和 "password" 作为测试用户登录。一旦您提交登录表单，您将被认证，然后被带到问候页面：
 
 image::images/greeting.png[The secured greeting page]
 
-If you click on the "Sign Out" button, your authentication is revoked, and you are returned to the log in page with a message indicating you are logged out.
+如果单击 "Sign Out" 按钮，您的身份验证将被撤销，并返回到登录页面，该消息显示您已登出。
 
 
 == Summary
-Congratulations! You have developed a simple web application that is secured with Spring Security.
+恭喜你，你已经开发了一个简单的、使用Spring Security来保护的Web应用。
 
 
 
-include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/master/footer.adoc[]
+include::https://raw.githubusercontent.com/webGoBetter/getting-started-macros/master/footer.adoc[]
 
