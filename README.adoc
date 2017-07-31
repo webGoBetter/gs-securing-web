@@ -114,7 +114,7 @@ include::complete/src/main/java/hello/WebSecurityConfig.java[]
 
 当用户成功登录后，他们将被重定向到先前请求的需要身份验证的页面。还有一个自定义（由 `loginPage()` 指定）的 "/login" 页面，每个用户都可以查看。
 
-至于` configureglobal（AuthenticationManagerBuilder）`方法，建立了一个内存用户存储与单个用户。该用户被赋予用户名 "user" 、密码 "password" 和角色 "USER" 。
+至于 `configureglobal(AuthenticationManagerBuilder)` 方法，建立了一个内存用户存储与单个用户。该用户被赋予用户名 "user" 、密码 "password" 和角色 "USER" 。
 
 现在，我们需要创建登录页面。目前已经为 "login" 视图赋予了视图控制器，所以你只需要创建login视图本身：
 
