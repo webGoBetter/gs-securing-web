@@ -112,7 +112,7 @@ include::complete/src/main/java/hello/WebSecurityConfig.java[]
 
 `configure(HttpSecurity)` 方法规定了哪个URL应该被保护，哪个不应该。具体而言， "/" 和 "/home" 的路径被配置为不需要任何认证。所有其他URL必须进行身份验证。
 
-当用户成功登录后，他们将被重定向到先前请求的需要身份验证的页面。还有一个自定义（由 `loginPage()` 指定）的 "/login" 页面，每个用户都可以查看。When a user successfully logs in, they will be redirected to the previously requested page that required authentication. There is a custom "/login" page specified by `loginPage()`, and everyone is allowed to view it.
+当用户成功登录后，他们将被重定向到先前请求的需要身份验证的页面。还有一个自定义（由 `loginPage()` 指定）的 "/login" 页面，每个用户都可以查看。
 
 至于` configureglobal（AuthenticationManagerBuilder）`方法，建立了一个内存用户存储与单个用户。该用户被赋予用户名 "user" 、密码 "password" 和角色 "USER" 。
 
@@ -177,7 +177,7 @@ image::images/greeting.png[The secured greeting page]
 如果单击 "Sign Out" 按钮，您的身份验证将被撤销，并返回到登录页面，该消息显示您已登出。
 
 
-== Summary
+== 总结
 恭喜你，你已经开发了一个简单的、使用Spring Security来保护的Web应用。
 
 
